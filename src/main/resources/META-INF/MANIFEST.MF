@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Main-Class: top.zongyoucheng.collection.CollectionMain
+Class-Path: mysql-connector-java-8.0.29.jar log4j-1.2.17.jar druid-1.2.1
+ 1.jar commons-dbutils-1.7.jar modbus4j-3.0.3.jar jssc-2.8.0.jar commons
+ -logging-1.1.1.jar commons-lang3-3.7.jar backport-util-concurrent-3.1.j
+ ar slf4j-api-1.7.25.jar protobuf-java-3.19.4.jar rxtx-2.1.7.jar slf4j-l
+ og4j12-1.7.25.jar
+
