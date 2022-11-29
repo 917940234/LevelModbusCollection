@@ -1,58 +1,62 @@
-                //液位低于下限且先前A8状态标志位是出铁或满包状态
+                //-------------------------------------------------A8核心逻辑--------------------------------------------
+                //空包模块逻辑-----------------------------------------------液位低于下限且先前A8状态标志位是出铁或满包状态
                 if (equipmentA8 <= A8statusLowerMark && A8StatusFlag != 0) {
-                    //A8状态标志位 置0
-                    A8StatusFlag = 0;
-                    //A8报警标志位 置0
-                    A8WarningFlag = 0;
-                    //调试输出控制台
-                    System.out.println("液位低于下限且先前A8状态标志位是出铁或满包状态, A8状态标志位 0，A8报警标志位 0");
-                //液位高于下限且先前A8状态标志位是空包状态，空包→出铁
-                } else if (equipmentA8 > A8statusLowerMark && A8StatusFlag == 0) {
-                    A8castStartTime = System.currentTimeMillis();//计算出铁开始时间，给重量液位模块使用，数据库是自动装载的，与本方法无关
-                    equipmentLocation = 1;
-                    System.out.println("当前铁水包位置:" + equipmentLocation + "开始出铁时间由SQL自动载入");
-                    String sqlCast01 = "INSERT INTO product_blast_furnace_cast(equipment_location)VALUES(?)";
-                    BeanHandler<Object> handerCast01 =  new BeanHandler<Object>(CollectionMain.class);
-                    runner.insert(conn,sqlCast01,handerCast01,equipmentLocation);
-                    //A8状态标志位 置出铁
-                    A8StatusFlag = 1;
-                    //A8出铁结束检测标志位 开启
-                    A8PourFlag = 1;
-                    //调试输出控制台
-                    System.out.println("液位高于下限且先前A8状态标志位是空包状态，空包→出铁, A8状态标志位 1，A8报警标志位 不变, A8出铁结束检测志位 1，A8castStartTime: " + A8castStartTime);
-                //先前A8状态标志位不是空包状态且出铁结束检测标志位开启，出铁→满包
-                } else if (A8StatusFlag != 0 && A8PourFlag == 1) {
+                    A8StatusFlag = 0;//A8状态标志位 置0
+                    A8WarningFlag = 0;//A8报警标志位 置0
+                    A8PourStartFlag = 1;//A8出铁开始检测标志位 开启
+                    System.out.println("空包模块逻辑-----------------------------------------------液位低于下限且先前A8状态标志位是出铁或满包状态");//调试输出
+                }
+                //出铁开始模块逻辑-----------------------------------------------液位高于下限且先前A8状态标志位是空包状态，空包→出铁
+                else if (equipmentA8 > A8statusLowerMark && A8StatusFlag == 0 && A8PourStartFlag == 1) {
                     //读取历史液位数据，从Level表
                     String sqlHistoryLevel = "SELECT equipment_A8 FROM product_blast_furnace_level ORDER BY blast_furnace_level_id DESC LIMIT 30,1";
                     ScalarHandler<Double> handerHistoryLevel =  new ScalarHandler<Double>("equipment_A8");
                     A8HistoryLevel =  runner.query(conn,sqlHistoryLevel,handerHistoryLevel);
-                    //调试输出控制台
-                    //System.out.println("读取历史液位数据，从Level表, A8HistoryLevel: " + A8HistoryLevel);
-                    //当前液位减去三分钟前历史液位的值低于-0.1时，判定出铁结束，执行下列方法
-                    if ((Double.parseDouble(A8Level)  - A8HistoryLevel) < -0.01) {
-                        //更新出铁结束时间，出铁合计时间，出铁吨位
-                        castTonnage = A8Weight;
-                        castEndTime = String.valueOf(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));//读取出铁结束时间
-                        equipmentLocation = 1;//当前铁水包位置1
-                        //System.out.println("当前铁水包位置:" + equipmentLocation + ",出铁结束时间" + castEndTime + ",出铁合计时间通过SQL计算");
-                        String sqlCast20 = "UPDATE product_blast_furnace_cast SET cast_end_time = NOW(), cast_total_time = (SELECT * FROM(SELECT TIMESTAMPDIFF(SECOND,cast_start_time,NOW()) FROM product_blast_furnace_cast WHERE equipment_location = ? ORDER BY blast_furnace_cast_id DESC LIMIT 1) as a), cast_tonnage = ? WHERE equipment_location = ? ORDER BY blast_furnace_cast_id DESC LIMIT 1";
-                        runner.update(conn, sqlCast20, equipmentLocation, castTonnage, equipmentLocation);
-                        //A8出铁结束检测标志位 关闭
-                        A8PourFlag = 0;
-                        //调试输出控制台
-                        System.out.println("当前液位减去三分钟前历史液位的值低于-0.1时，判定出铁结束，出铁结束检测标志位关闭，更新出铁结束时间，出铁合计时间，出铁吨位. 当前液位减去三分钟前历史液位的值低于-0.1时，判定出铁结束，执行下列方法, castTonnage: " + castTonnage + ", A8Level: " + A8Level + ", castEndTime: " + castEndTime);
+                    Double A8Speed = A8Level - A8HistoryLevel;
+                    System.out.println("出铁开始模块逻辑-----------------------------------------------读取历史液位数据, " +
+                            "A8Speed: " + A8Speed);//调试输出控制台
+                    //判定出铁开始，当30s液位差在0.24~-0.26之间时
+                    if ((A8Speed >= 0.24) && (A8Speed <= 0.26)) {
+                        A8castStartTime = System.currentTimeMillis();//计算出铁开始时间，给重量液位模块使用，数据库是自动装载的，与本方法无关
+                        //System.out.println("当前铁水包位置:" + equipmentLocation + "开始出铁时间由SQL自动载入");
+                        String sqlCast01 = "INSERT INTO product_blast_furnace_cast(equipment_location)VALUES(?)";
+                        BeanHandler<Object> handerCast01 =  new BeanHandler<Object>(CollectionMain.class);
+                        runner.insert(conn,sqlCast01,handerCast01,equipmentLocationA8);
+                        A8StatusFlag = 1;//A8状态标志位 置出铁
+                        A8PourStartFlag = 0;//A8出铁开始检测标志位 关闭
+                        A8PourEndFlag = 1;//A8出铁结束检测标志位 开启
+                        System.out.println("判定出铁开始，当30s液位差在0.24~-0.26之间时, " +
+                                "A8castStartTime: " + A8castStartTime);//调试输出
                     }
                 }
-                //液位高于报警（单独判断）且先前A8报警标志位是0，执行报警方法
-                if (equipmentA8 >= warningLevel && A8WarningFlag == 0) {
-                    //更新出铁报警时间
-                    equipmentLocation = 1;//当前铁水包位置1
-                    String sqlCast12 = "UPDATE product_blast_furnace_cast SET cast_alert_time = NOW() WHERE equipment_location = ? ORDER BY blast_furnace_cast_id DESC LIMIT 1";
-                    runner.update(conn, sqlCast12, equipmentLocation);
-                    //A8报警标志位 置1
-                    A8WarningFlag = 1;
-                    //A8状态标志位 置满包
-                    A8StatusFlag = 2;
-                    //调试输出控制台
-                    System.out.println("出铁报警, equipmentA8: " + equipmentA8 + ", warningLevel:" + warningLevel + "A8状态标志位 2， A8报警标志位 1");
+                //出铁结束模块逻辑-------------------------------------先前A8状态标志位不是空包状态且出铁结束检测标志位开启，出铁→满包
+                else if (A8StatusFlag != 0 && A8PourEndFlag == 1) {
+                    //读取历史液位数据，从Level表
+                    String sqlHistoryLevel = "SELECT equipment_A8 FROM product_blast_furnace_level ORDER BY blast_furnace_level_id DESC LIMIT 30,1";
+                    ScalarHandler<Double> handerHistoryLevel =  new ScalarHandler<Double>("equipment_A8");
+                    A8HistoryLevel =  runner.query(conn,sqlHistoryLevel,handerHistoryLevel);
+                    Double A8Speed = A8Level - A8HistoryLevel;
+                    System.out.println("出铁结束模块逻辑-------------------------------------先前A8状态标志位不是空包状态且出铁结束检测标志位开启，出铁→满包, " +
+                            "A8HistoryLevel: " + A8HistoryLevel);//调试输出
+                    //判定出铁结束，当30s液位差在-0.03~-0.01之间时
+                    if ((A8Speed >= -0.03) && (A8Speed <= -0.01)) {
+                        castTonnage = A8Weight;//读取出铁吨位
+                        castEndTime = String.valueOf(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));//读取出铁结束时间
+                        //System.out.println("当前铁水包位置:" + equipmentLocation + ",出铁结束时间" + castEndTime + ",出铁合计时间通过SQL计算");
+                        String sqlCast20 = "UPDATE product_blast_furnace_cast SET cast_end_time = NOW(), cast_total_time = (SELECT * FROM(SELECT TIMESTAMPDIFF(SECOND,cast_start_time,NOW()) FROM product_blast_furnace_cast WHERE equipment_location = ? ORDER BY blast_furnace_cast_id DESC LIMIT 1) as a), cast_tonnage = ? WHERE equipment_location = ? ORDER BY blast_furnace_cast_id DESC LIMIT 1";
+                        runner.update(conn, sqlCast20, equipmentLocationA8, castTonnage, equipmentLocationA8);
+                        A8PourEndFlag = 0;//A8出铁结束检测标志位 关闭
+                        System.out.println("判定出铁结束，当30s液位差在-0.03~-0.01之间时, " +
+                                "castTonnage: " + castTonnage + ", A8Level: " + A8Level + ", castEndTime: " + castEndTime);//调试输出
+                    }
                 }
+                //满包报警模块逻辑--------------------------------------------------液位高于报警且先前A8报警标志位是0，执行报警方法
+                if (equipmentA8 >= warningLevel && A8WarningFlag == 0) {
+                    String sqlCast12 = "UPDATE product_blast_furnace_cast SET cast_alert_time = NOW() WHERE equipment_location = ? ORDER BY blast_furnace_cast_id DESC LIMIT 1";
+                    runner.update(conn, sqlCast12, equipmentLocationA8);//更新出铁报警时间
+                    A8WarningFlag = 1;//A8报警标志位 置1
+                    A8StatusFlag = 2;//A8状态标志位 置满包
+                    System.out.println("满包报警模块逻辑--------------------------------------------------液位高于报警且先前A8报警标志位是0，执行报警方法, " +
+                            "equipmentA8: " + equipmentA8 + ", warningLevel:" + warningLevel);//调试输出
+                }
+                //-------------------------------------------------A8核心逻辑--------------------------------------------
