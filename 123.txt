@@ -1,62 +1,43 @@
-                //-------------------------------------------------A8核心逻辑--------------------------------------------
-                //空包模块逻辑-----------------------------------------------液位低于下限且先前A8状态标志位是出铁或满包状态
-                if (equipmentA8 <= A8statusLowerMark && A8StatusFlag != 0) {
-                    A8StatusFlag = 0;//A8状态标志位 置0
-                    A8WarningFlag = 0;//A8报警标志位 置0
-                    A8PourStartFlag = 1;//A8出铁开始检测标志位 开启
-                    System.out.println("空包模块逻辑-----------------------------------------------液位低于下限且先前A8状态标志位是出铁或满包状态");//调试输出
+                //计算当前重量数据
+                if (equipmentA1 <= 0.93) {
+                    A1Weight = String.format("%.3f", Math.PI * 7.30 * Math.pow(equipmentA1, 2) - Math.PI * 1.83 * Math.pow(equipmentA1, 3));//分段函数第一段
+                } else if (equipmentA1 > 1.86) {
+                    A1Weight = String.format("%.3f", Math.PI * 10.30 * equipmentA1 - Math.PI * 5.29);//分段函数第三段
+                } else {
+                    A1Weight = String.format("%.3f", Math.PI * 9.71 * equipmentA1 - Math.PI * 4.19);//分段函数第二段
                 }
-                //出铁开始模块逻辑-----------------------------------------------液位高于下限且先前A8状态标志位是空包状态，空包→出铁
-                else if (equipmentA8 > A8statusLowerMark && A8StatusFlag == 0 && A8PourStartFlag == 1) {
-                    //读取历史液位数据，从Level表
-                    String sqlHistoryLevel = "SELECT equipment_A8 FROM product_blast_furnace_level ORDER BY blast_furnace_level_id DESC LIMIT 30,1";
-                    ScalarHandler<Double> handerHistoryLevel =  new ScalarHandler<Double>("equipment_A8");
-                    A8HistoryLevel =  runner.query(conn,sqlHistoryLevel,handerHistoryLevel);
-                    Double A8Speed = A8Level - A8HistoryLevel;
-                    System.out.println("出铁开始模块逻辑-----------------------------------------------读取历史液位数据, " +
-                            "A8Speed: " + A8Speed);//调试输出控制台
-                    //判定出铁开始，当30s液位差在0.24~-0.26之间时
-                    if ((A8Speed >= 0.24) && (A8Speed <= 0.26)) {
-                        A8castStartTime = System.currentTimeMillis();//计算出铁开始时间，给重量液位模块使用，数据库是自动装载的，与本方法无关
-                        //System.out.println("当前铁水包位置:" + equipmentLocation + "开始出铁时间由SQL自动载入");
-                        String sqlCast01 = "INSERT INTO product_blast_furnace_cast(equipment_location)VALUES(?)";
-                        BeanHandler<Object> handerCast01 =  new BeanHandler<Object>(CollectionMain.class);
-                        runner.insert(conn,sqlCast01,handerCast01,equipmentLocationA8);
-                        A8StatusFlag = 1;//A8状态标志位 置出铁
-                        A8PourStartFlag = 0;//A8出铁开始检测标志位 关闭
-                        A8PourEndFlag = 1;//A8出铁结束检测标志位 开启
-                        System.out.println("判定出铁开始，当30s液位差在0.24~-0.26之间时, " +
-                                "A8castStartTime: " + A8castStartTime);//调试输出
-                    }
+                if (equipmentA2 <= 0.93) {
+                    A2Weight = String.format("%.3f", Math.PI * 7.30 * Math.pow(equipmentA2, 2) - Math.PI * 1.83 * Math.pow(equipmentA2, 3));//分段函数第一段
+                } else if (equipmentA1 > 1.86) {
+                    A2Weight = String.format("%.3f", Math.PI * 10.30 * equipmentA2 - Math.PI * 5.29);//分段函数第三段
+                } else {
+                    A2Weight = String.format("%.3f", Math.PI * 9.71 * equipmentA2 - Math.PI * 4.19);//分段函数第二段
                 }
-                //出铁结束模块逻辑-------------------------------------先前A8状态标志位不是空包状态且出铁结束检测标志位开启，出铁→满包
-                else if (A8StatusFlag != 0 && A8PourEndFlag == 1) {
-                    //读取历史液位数据，从Level表
-                    String sqlHistoryLevel = "SELECT equipment_A8 FROM product_blast_furnace_level ORDER BY blast_furnace_level_id DESC LIMIT 30,1";
-                    ScalarHandler<Double> handerHistoryLevel =  new ScalarHandler<Double>("equipment_A8");
-                    A8HistoryLevel =  runner.query(conn,sqlHistoryLevel,handerHistoryLevel);
-                    Double A8Speed = A8Level - A8HistoryLevel;
-                    System.out.println("出铁结束模块逻辑-------------------------------------先前A8状态标志位不是空包状态且出铁结束检测标志位开启，出铁→满包, " +
-                            "A8HistoryLevel: " + A8HistoryLevel);//调试输出
-                    //判定出铁结束，当30s液位差在-0.03~-0.01之间时
-                    if ((A8Speed >= -0.03) && (A8Speed <= -0.01)) {
-                        castTonnage = A8Weight;//读取出铁吨位
-                        castEndTime = String.valueOf(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));//读取出铁结束时间
-                        //System.out.println("当前铁水包位置:" + equipmentLocation + ",出铁结束时间" + castEndTime + ",出铁合计时间通过SQL计算");
-                        String sqlCast20 = "UPDATE product_blast_furnace_cast SET cast_end_time = NOW(), cast_total_time = (SELECT * FROM(SELECT TIMESTAMPDIFF(SECOND,cast_start_time,NOW()) FROM product_blast_furnace_cast WHERE equipment_location = ? ORDER BY blast_furnace_cast_id DESC LIMIT 1) as a), cast_tonnage = ? WHERE equipment_location = ? ORDER BY blast_furnace_cast_id DESC LIMIT 1";
-                        runner.update(conn, sqlCast20, equipmentLocationA8, castTonnage, equipmentLocationA8);
-                        A8PourEndFlag = 0;//A8出铁结束检测标志位 关闭
-                        System.out.println("判定出铁结束，当30s液位差在-0.03~-0.01之间时, " +
-                                "castTonnage: " + castTonnage + ", A8Level: " + A8Level + ", castEndTime: " + castEndTime);//调试输出
-                    }
+                if (equipmentA3 <= 0.93) {
+                    A3Weight = String.format("%.3f", Math.PI * 7.30 * Math.pow(equipmentA3, 2) - Math.PI * 1.83 * Math.pow(equipmentA3, 3));//分段函数第一段
+                } else if (equipmentA1 > 1.86) {
+                    A3Weight = String.format("%.3f", Math.PI * 10.30 * equipmentA3 - Math.PI * 5.29);//分段函数第三段
+                } else {
+                    A3Weight = String.format("%.3f", Math.PI * 9.71 * equipmentA3 - Math.PI * 4.19);//分段函数第二段
                 }
-                //满包报警模块逻辑--------------------------------------------------液位高于报警且先前A8报警标志位是0，执行报警方法
-                if (equipmentA8 >= warningLevel && A8WarningFlag == 0) {
-                    String sqlCast12 = "UPDATE product_blast_furnace_cast SET cast_alert_time = NOW() WHERE equipment_location = ? ORDER BY blast_furnace_cast_id DESC LIMIT 1";
-                    runner.update(conn, sqlCast12, equipmentLocationA8);//更新出铁报警时间
-                    A8WarningFlag = 1;//A8报警标志位 置1
-                    A8StatusFlag = 2;//A8状态标志位 置满包
-                    System.out.println("满包报警模块逻辑--------------------------------------------------液位高于报警且先前A8报警标志位是0，执行报警方法, " +
-                            "equipmentA8: " + equipmentA8 + ", warningLevel:" + warningLevel);//调试输出
+                if (equipmentA6 <= 0.93) {
+                    A6Weight = String.format("%.3f", Math.PI * 7.30 * Math.pow(equipmentA6, 2) - Math.PI * 1.83 * Math.pow(equipmentA6, 3));//分段函数第一段
+                } else if (equipmentA1 > 1.86) {
+                    A6Weight = String.format("%.3f", Math.PI * 10.30 * equipmentA6 - Math.PI * 5.29);//分段函数第三段
+                } else {
+                    A6Weight = String.format("%.3f", Math.PI * 9.71 * equipmentA6 - Math.PI * 4.19);//分段函数第二段
                 }
-                //-------------------------------------------------A8核心逻辑--------------------------------------------
+                if (equipmentA7 <= 0.93) {
+                    A7Weight = String.format("%.3f", Math.PI * 7.30 * Math.pow(equipmentA7, 2) - Math.PI * 1.83 * Math.pow(equipmentA7, 3));//分段函数第一段
+                } else if (equipmentA1 > 1.86) {
+                    A7Weight = String.format("%.3f", Math.PI * 10.30 * equipmentA7 - Math.PI * 5.29);//分段函数第三段
+                } else {
+                    A7Weight = String.format("%.3f", Math.PI * 9.71 * equipmentA7 - Math.PI * 4.19);//分段函数第二段
+                }
+                if (equipmentA8 <= 0.93) {
+                    A8Weight = String.format("%.3f", Math.PI * 7.30 * Math.pow(equipmentA8, 2) - Math.PI * 1.83 * Math.pow(equipmentA8, 3));//分段函数第一段
+                } else if (equipmentA1 > 1.86) {
+                    A8Weight = String.format("%.3f", Math.PI * 10.30 * equipmentA8 - Math.PI * 5.29);//分段函数第三段
+                } else {
+                    A8Weight = String.format("%.3f", Math.PI * 9.71 * equipmentA8 - Math.PI * 4.19);//分段函数第二段
+                }

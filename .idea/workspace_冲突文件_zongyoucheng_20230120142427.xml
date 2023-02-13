@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="LevelModbusCollection:jar" />
+    </artifacts-to-build>
+  </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="0890da78-816e-498f-8c28-d03cbbb7a6af" name="Changes" comment="v1.1&#10;改进优化一大堆地方，从逻辑到语法">
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__ch_qos_reload4j_reload4j_1_2_22.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_api_2_0_4.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_reload4j_2_0_4.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_alibaba_druid_1_2_11.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_alibaba_druid_1_2_15.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__log4j_log4j_1_2_17.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_api_1_7_25.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_log4j12_1_7_25.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/123.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LevelModbusCollection.iml" beforeDir="false" afterPath="$PROJECT_DIR$/LevelModbusCollection.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hs_err_pid14728.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/top/zongyoucheng/collection/CollectionMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/top/zongyoucheng/collection/CollectionMain.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+        <option value="JUnit5 Test Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectId" id="2HZgz1M2wVCt9EAcakEEaOgSAQ3" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/zongyoucheng/Desktop/BaiduNetdiskWorkspace/Code/idea-workspace/LevelModbusCollection&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2823834&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;SQL Dialects&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
+    ]
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\BaiduSyncdisk\Code\idea-workspace\LevelModbusCollection\src\main\resources" />
+      <recent name="D:\BaiduSyncdisk\Code\idea-workspace\LevelModbusCollection" />
+      <recent name="C:\Users\zongyoucheng\Desktop\BaiduNetdiskWorkspace\Code\idea-workspace\LevelModbusCollection" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\BaiduSyncdisk\Code\idea-workspace\LevelModbusCollection\src\main\resources" />
+      <recent name="D:\BaiduSyncdisk\Code\idea-workspace" />
+      <recent name="C:\Users\zongyoucheng\Desktop\BaiduNetdiskWorkspace\Code\idea-workspace\LevelModbusCollection\src\main\java\top\zongyoucheng\collection" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="top.zongyoucheng.Jdbc" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.CollectionMain">
+    <configuration name="CollectionMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="1.8.0_202" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="top.zongyoucheng.collection.CollectionMain" />
+      <module name="LevelModbusCollection" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="top.zongyoucheng.collection.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <extension name="software.aws.toolkits.jetbrains.core.execution.JavaAwsConnectionExtension">
+        <option name="credential" />
+        <option name="region" />
+        <option name="useCurrentConnection" value="false" />
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="LevelModbusCollection-1.0-SNAPSHOT-jar-with-dependencies.jar" type="JarApplication" temporary="true">
+      <option name="JAR_PATH" value="$PROJECT_DIR$/target/LevelModbusCollection-1.0-SNAPSHOT-jar-with-dependencies.jar" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method v="2" />
+    </configuration>
+    <configuration name="LevelModbusCollection-1.0-SNAPSHOT.jar" type="JarApplication" temporary="true">
+      <option name="JAR_PATH" value="$PROJECT_DIR$/target/LevelModbusCollection-1.0-SNAPSHOT.jar" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Application.CollectionMain" />
+      <item itemvalue="JAR Application.LevelModbusCollection-1.0-SNAPSHOT.jar" />
+      <item itemvalue="JAR Application.LevelModbusCollection-1.0-SNAPSHOT-jar-with-dependencies.jar" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.CollectionMain" />
+        <item itemvalue="JAR Application.LevelModbusCollection-1.0-SNAPSHOT.jar" />
+        <item itemvalue="JAR Application.LevelModbusCollection-1.0-SNAPSHOT-jar-with-dependencies.jar" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0890da78-816e-498f-8c28-d03cbbb7a6af" name="Changes" comment="" />
+      <created>1668498279462</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1668498279462</updated>
+      <workItem from="1668498280664" duration="8683000" />
+      <workItem from="1668508858279" duration="817000" />
+      <workItem from="1668509683236" duration="749000" />
+      <workItem from="1668510459186" duration="2337000" />
+      <workItem from="1668512850748" duration="19672000" />
+      <workItem from="1668569736625" duration="1622000" />
+      <workItem from="1668571594135" duration="17314000" />
+      <workItem from="1668592310327" duration="2884000" />
+      <workItem from="1668595946222" duration="458000" />
+      <workItem from="1668736100753" duration="849000" />
+      <workItem from="1668736959034" duration="1337000" />
+      <workItem from="1668738611397" duration="2347000" />
+      <workItem from="1668740966729" duration="86000" />
+      <workItem from="1668741060531" duration="82000" />
+      <workItem from="1668741169537" duration="4476000" />
+      <workItem from="1669372646545" duration="21750000" />
+      <workItem from="1669512149312" duration="308000" />
+      <workItem from="1669515177635" duration="137000" />
+      <workItem from="1669515327344" duration="5000" />
+      <workItem from="1669515521889" duration="1984000" />
+      <workItem from="1669519797514" duration="7000" />
+      <workItem from="1669553062786" duration="382000" />
+      <workItem from="1669596973376" duration="3362000" />
+      <workItem from="1669610616475" duration="21237000" />
+      <workItem from="1669685326738" duration="7919000" />
+      <workItem from="1669702973779" duration="1867000" />
+      <workItem from="1669715804735" duration="40000" />
+      <workItem from="1669716022429" duration="3962000" />
+      <workItem from="1669720176334" duration="38000" />
+      <workItem from="1669723378400" duration="153000" />
+      <workItem from="1669730396954" duration="8712000" />
+      <workItem from="1669780300638" duration="145000" />
+      <workItem from="1669783707853" duration="4612000" />
+      <workItem from="1669797488507" duration="24000" />
+      <workItem from="1669806452434" duration="1500000" />
+      <workItem from="1669944147226" duration="32000" />
+      <workItem from="1669982247967" duration="6157000" />
+      <workItem from="1670217462498" duration="388000" />
+      <workItem from="1671079125301" duration="776000" />
+      <workItem from="1672991307444" duration="225000" />
+    </task>
+    <task id="LOCAL-00001" summary="v1.1&#10;改进优化一大堆地方，从逻辑到语法">
+      <created>1669702264408</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1669702264408</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/../.." />
+    </ignored-roots>
+    <MESSAGE value="v1.1&#10;改进优化一大堆地方，从逻辑到语法" />
+    <option name="LAST_COMMIT_MESSAGE" value="v1.1&#10;改进优化一大堆地方，从逻辑到语法" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
